@@ -39,15 +39,6 @@ jobs:
             --template-file ./template.yml \
             --stack-name ${STACK_NAME} \
             --parameter-overrides UserPoolName=${USER_POOL_NAME} UserPoolClientName=${USER_POOL_CLIENT_NAME}
-      - name: Run Script
-        run: |
-          source .env
-          export USER_POOL_ID=$(echo "$OUTPUTS" | jq -r '.[] | select(.OutputKey == "UserPoolId") | .OutputValue')
-          export USER_POOL_CLIENT_ID=$(echo "$OUTPUTS" | jq -r '.[] | select(.OutputKey == "UserPoolClientId") | .OutputValue')
-          npm run build
-          npm run start signup
-          npm run start signin
-          npm run start verify
   execute:
     runs-on: ubuntu-22.04
     needs: provision
