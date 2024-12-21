@@ -22,6 +22,8 @@ aws cloudformation deploy \
 デプロイ後、CloudFormationのOutputsにある`UserPoolId`と`UserPoolClientId`を確認してください。  
 
 ```shell
+source .env
+
 aws cloudformation describe-stacks \
   --stack-name ${STACK_NAME} \
   --query 'Stacks[0].Outputs[*].{Key:OutputKey,Value:OutputValue}' \
@@ -32,8 +34,8 @@ OUTPUTS=$(aws cloudformation describe-stacks \
   --query 'Stacks[0].Outputs' \
   --output json)
 
-USER_POOL_ID=$(echo "$OUTPUTS" | jq -r '.[] | select(.OutputKey == "UserPoolId") | .OutputValue')
-USER_POOL_CLIENT_ID=$(echo "$OUTPUTS" | jq -r '.[] | select(.OutputKey == "UserPoolClientId") | .OutputValue')
+export USER_POOL_ID=$(echo "$OUTPUTS" | jq -r '.[] | select(.OutputKey == "UserPoolId") | .OutputValue')
+export USER_POOL_CLIENT_ID=$(echo "$OUTPUTS" | jq -r '.[] | select(.OutputKey == "UserPoolClientId") | .OutputValue')
 
 echo "USER_POOL_ID: ${USER_POOL_ID}"
 echo "USER_POOL_CLIENT_ID: ${USER_POOL_CLIENT_ID}"
