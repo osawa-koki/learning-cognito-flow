@@ -1,0 +1,86 @@
+name: cd
+
+on:
+  workflow_dispatch:
+  push:
+    tags: [ 'v-*' ]
+
+jobs:
+  provision:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+      - name: Cache node_modules
+        id: node_modules_cache_id
+        uses: actions/cache@v4
+        with:
+          path: ./node_modules/
+          key: node-modules-${{ hashFiles('./**/package-lock.json') }}
+      - name: Create dotenv file
+        run: echo '${{ secrets.DOTENV }}' > ./.env
+      - name: Install dependencies
+        if: steps.node_modules_cache_id.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile --non-interactive
+      - name: Deploy
+        run: |
+          source .env
+          aws cloudformation deploy \
+            --template-file ./template.yml \
+            --stack-name ${STACK_NAME} \
+            --parameter-overrides UserPoolName=${USER_POOL_NAME} UserPoolClientName=${USER_POOL_CLIENT_NAME}
+      - name: Run Script
+        run: |
+          source .env
+          export USER_POOL_ID=$(echo "$OUTPUTS" | jq -r '.[] | select(.OutputKey == "UserPoolId") | .OutputValue')
+          export USER_POOL_CLIENT_ID=$(echo "$OUTPUTS" | jq -r '.[] | select(.OutputKey == "UserPoolClientId") | .OutputValue')
+          npm run build
+          npm run start signup
+          npm run start signin
+          npm run start verify
+  execute:
+    runs-on: ubuntu-22.04
+    needs: provision
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+      - name: Cache node_modules
+        id: node_modules_cache_id
+        uses: actions/cache@v4
+        with:
+          path: ./node_modules/
+          key: node-modules-${{ hashFiles('./**/package-lock.json') }}
+      - name: Create dotenv file
+        run: echo '${{ secrets.DOTENV }}' > ./.env
+      - name: Install dependencies
+        if: steps.node_modules_cache_id.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile --non-interactive
+      - name: Run Script
+        run: |
+          source .env
+          export USER_POOL_ID=$(echo "$OUTPUTS" | jq -r '.[] | select(.OutputKey == "UserPoolId") | .OutputValue')
+          export USER_POOL_CLIENT_ID=$(echo "$OUTPUTS" | jq -r '.[] | select(.OutputKey == "UserPoolClientId") | .OutputValue')
+          npm run build
+          npm run start signup
+          npm run start signin
+          npm run start verify
