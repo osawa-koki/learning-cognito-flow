@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 
 import signup from "./signup";
+import signin from "./signin";
 
 dotenv.config();
 
@@ -14,10 +15,10 @@ const COMMANDS = {
 
 switch (command) {
   case COMMANDS.signup:
-    const response = await signup();
-    console.log(response);
+    console.log(await signup());
     break;
   case COMMANDS.signin:
+    console.log(await signin());
     break;
   default:
     console.error(`Invalid command: '${command}'`);

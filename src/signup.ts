@@ -1,5 +1,7 @@
 import {
+  AdminConfirmSignUpCommand,
   CognitoIdentityProviderClient,
+  NotAuthorizedException,
   SignUpCommand,
   UsernameExistsException,
 } from "@aws-sdk/client-cognito-identity-provider";
@@ -17,15 +19,25 @@ export default async function signup() {
   });
 
   try {
-    const response = await client.send(command);
-    return response;
+    console.log("processing signup command");
+    await client.send(command);
   } catch (error) {
-    if (error instanceof UsernameExistsException) {
-      return {
-        status: "success",
-        message: "User already exists",
-      };
+    if (!(error instanceof UsernameExistsException)) {
+      throw error;
     }
-    throw error;
   }
+
+  const confirmCommand = new AdminConfirmSignUpCommand({
+    UserPoolId: process.env.USER_POOL_ID!,
+    Username: process.env.COGNITO_USER_USERNAME!,
+  });
+  try {
+    console.log("processing confirm command");
+    await client.send(confirmCommand);
+  } catch (error) {
+    if (!(error instanceof NotAuthorizedException)) {
+      throw error;
+    }
+  }
+  return;
 }

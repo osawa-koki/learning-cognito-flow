@@ -38,8 +38,5 @@
 
   "mounts": [
     "source=${env:HOME}/.aws,target=/root/.aws,type=bind"
-  ],
-  "containerEnv": {
-    "AWS_PROFILE": "default"
-  }
+  ]
 }
