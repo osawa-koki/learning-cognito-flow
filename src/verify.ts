@@ -42,10 +42,10 @@ export default async function verify() {
         const jwkUrl = `https://cognito-idp.${region}.amazonaws.com/${process.env.USER_POOL_ID!}/.well-known/jwks.json`;
         const jwk = await fetch(jwkUrl).then((res) => res.json());
 
-        const decodedHeader = jwt.decode(token, { complete: true })?.header!;
+        const decodedHeader = jwt.decode(token, { complete: true })!.header!;
         const kid = decodedHeader.kid;
 
-        const pem = jwkToPem(jwk.keys.find((key) => key.kid === kid));
+        const pem = jwkToPem(jwk.keys.find((key: { kid: string }) => key.kid === kid));
         jwt.verify(token, pem, { algorithms: ["RS256"] }, function (error, decodedToken) {
           if (error != null) {
             console.log(`🚨 Token not valid! type: ${tokenType} method: jwt.verify`);
