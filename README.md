@@ -7,7 +7,8 @@
 `.env.example`をコピーして`.env`を作成してください。  
 中身は適切に設定してください。  
 
-以下のコマンドで、CloudFormationテンプレートをデプロイします。  
+DevContainerに入ってから以下のコマンドで、CloudFormationテンプレートをデプロイします。  
+※ `~/.aws/credentials`に適切なAWSの認証情報が設定されていることを前提としています。  
 
 ```shell
 source .env
