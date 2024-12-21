@@ -71,6 +71,8 @@ jobs:
           source .env
           export USER_POOL_ID=$(echo "$OUTPUTS" | jq -r '.[] | select(.OutputKey == "UserPoolId") | .OutputValue')
           export USER_POOL_CLIENT_ID=$(echo "$OUTPUTS" | jq -r '.[] | select(.OutputKey == "UserPoolClientId") | .OutputValue')
+          echo "USER_POOL_ID: $USER_POOL_ID"
+          echo "USER_POOL_CLIENT_ID: $USER_POOL_CLIENT_ID"
           npm run build
           npm run start signup
           npm run start signin
