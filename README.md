@@ -14,7 +14,7 @@ DevContainerに入ってから以下のコマンドで、CloudFormationテンプ
 source .env
 
 aws cloudformation deploy \
-  --template-file template.yml \
+  --template-file ./template.yml \
   --stack-name ${STACK_NAME} \
   --parameter-overrides UserPoolName=${USER_POOL_NAME} UserPoolClientName=${USER_POOL_CLIENT_NAME}
 ```
@@ -52,3 +52,15 @@ npm run start signup
 npm run start signin
 npm run start verify
 ```
+
+## CDワークフロー
+
+GitHub Actionsの`cd`ワークフローでプロビジョニングと実行を行います。  
+以下のシークレットをGitHubのリポジトリに設定してください。  
+
+| シークレット名 | 説明 |
+| --- | --- |
+| AWS_ACCESS_KEY_ID | AWSのアクセスキーID |
+| AWS_SECRET_ACCESS_KEY | AWSのシークレットアクセスキー |
+| AWS_REGION | AWSのリージョン |
+| DOTENV | `.env`ファイルの内容 |
