@@ -2,6 +2,8 @@
 
 🧆🧆🧆 Cognitoを用いてOAuth2.0の認証フローを学ぶ！  
 
+![成果物](./fruit.gif)  
+
 ## 環境構築
 
 `.env.example`をコピーして`.env`を作成してください。  
