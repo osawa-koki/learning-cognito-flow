@@ -2,7 +2,7 @@
 
 🧆🧆🧆 Cognitoを用いてOAuth2.0の認証フローを学ぶ！  
 
-## 実行方法
+## 環境構築
 
 `.env.example`をコピーして`.env`を作成してください。  
 中身は適切に設定してください。  
@@ -39,4 +39,16 @@ export USER_POOL_CLIENT_ID=$(echo "$OUTPUTS" | jq -r '.[] | select(.OutputKey ==
 
 echo "USER_POOL_ID: ${USER_POOL_ID}"
 echo "USER_POOL_CLIENT_ID: ${USER_POOL_CLIENT_ID}"
+```
+
+## 実行方法
+
+```shell
+source .env
+
+npm run build
+
+npm run start signup
+npm run start signin
+npm run start verify
 ```
