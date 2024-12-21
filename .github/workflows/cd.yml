@@ -69,6 +69,10 @@ jobs:
       - name: Run Script
         run: |
           source .env
+          OUTPUTS=$(aws cloudformation describe-stacks \
+            --stack-name ${STACK_NAME} \
+            --query 'Stacks[0].Outputs' \
+            --output json)
           export USER_POOL_ID=$(echo "$OUTPUTS" | jq -r '.[] | select(.OutputKey == "UserPoolId") | .OutputValue')
           export USER_POOL_CLIENT_ID=$(echo "$OUTPUTS" | jq -r '.[] | select(.OutputKey == "UserPoolClientId") | .OutputValue')
           echo "USER_POOL_ID: $USER_POOL_ID"
