@@ -1,0 +1,21 @@
+{
+  "name": "learning-cognito-flow",
+  "version": "1.0.0",
+  "description": "🧆🧆🧆 Cognitoを用いてOAuth2.0の認証フローを学ぶ！",
+  "main": "./src/index.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/osawa-koki/learning-cognito-flow.git"
+  },
+  "author": "osawa-koki <koki@osawa.cloud>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/osawa-koki/learning-cognito-flow/issues"
+  },
+  "homepage": "https://github.com/osawa-koki/learning-cognito-flow#readme",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
