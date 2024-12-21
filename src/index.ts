@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 
 import signup from "./signup";
 import signin from "./signin";
+import verify from "./verify";
 
 dotenv.config();
 
@@ -11,6 +12,7 @@ async function main() {
 const COMMANDS = {
   signup: "signup",
   signin: "signin",
+  verify: "verify"
 };
 
 switch (command) {
@@ -19,6 +21,9 @@ switch (command) {
     break;
   case COMMANDS.signin:
     console.log(await signin());
+    break;
+  case COMMANDS.verify:
+    console.log(await verify());
     break;
   default:
     console.error(`Invalid command: '${command}'`);
