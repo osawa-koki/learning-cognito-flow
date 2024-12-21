@@ -1,0 +1,35 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+  UserPoolName:
+    Type: String
+    Description: The name of the user pool.
+    AllowedPattern: ^[a-zA-Z0-9_.-]+$
+    MinLength: 8
+    MaxLength: 128
+  UserPoolClientName:
+    Type: String
+    Description: The name of the user pool client.
+    AllowedPattern: ^[a-zA-Z0-9_.-]+$
+    MinLength: 8
+    MaxLength: 128
+
+Resources:
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: !Ref UserPoolName
+
+  UserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref UserPool
+      ClientName: !Ref UserPoolClientName
+
+Outputs:
+  UserPoolId:
+    Description: ID of the User Pool
+    Value: !Ref UserPool
+  UserPoolClientId:
+    Description: ID of the User Pool Client
+    Value: !Ref UserPoolClient
